@@ -1,10 +1,24 @@
 import React, { Component } from 'react'
 import Books from './Books'
+import * as BooksAPI from '../utils/BooksAPI'
 
 class BookShelves extends Component {
+  state = {
+    books: []
+  }
 
-  setStatus = (book) => {
-    console.log(book)
+  componentDidMount = () => {
+    BooksAPI.getAll().then((books) => {
+      this.setState({ books })
+    });
+  }
+
+  statusChange = (data) => {
+    BooksAPI.update(data.book, data.value).then((json) => {
+      BooksAPI.getAll().then((books) => {
+        this.setState({ books })
+      });
+    })
   }
 
   render() {
@@ -15,9 +29,9 @@ class BookShelves extends Component {
           <div className="bookshelf" key={category.name}>
             <h2 key={category.name} className="bookshelf-title">{category.name}</h2>
             <Books
-              status={this.setStatus}
               bookshelves={category}
-              books={this.props.books}
+              books={this.state.books}
+              statusChange={this.statusChange}
             />
           </div>
         ))}
