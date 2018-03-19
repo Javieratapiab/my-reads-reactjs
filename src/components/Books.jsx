@@ -14,12 +14,12 @@ class Books extends Component {
   }
 
   render() {
-    const bookshelves = this.props.bookshelves
+    const bookshelf = this.props.bookshelf
     const books = this.props.books
 
     /* Filtering books by shelf */
     let showingBooks
-    showingBooks = books.filter((book) => book.shelf === bookshelves.value)
+    showingBooks = books.filter((book) => book.shelf === bookshelf.value)
 
     return (
       <div className="bookshelf-books">
@@ -41,7 +41,7 @@ class Books extends Component {
                       <option value="currentlyReading">Currently Reading</option>
                       <option value="wantToRead">Want to Read</option>
                       <option value="read">Read</option>
-                      <option value="none">None</option>
+                      <option value="none" disabled>None</option>
                     </select>
                   </div>
                 </div>

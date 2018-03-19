@@ -8,7 +8,7 @@ class BooksApp extends Component {
     categories: [
       { name: 'Currently Reading', value: 'currentlyReading' },
       { name: 'Want to Read', value: 'wantToRead' },
-      { name: 'Read', value: 'read' }
+      { name: 'Read', value: 'read' },
     ],
     /**
      * TODO: Instead of using this state variable to keep track of which page

@@ -3,6 +3,7 @@ import Books from './Books'
 import * as BooksAPI from '../utils/BooksAPI'
 
 class BookShelves extends Component {
+
   state = {
     books: []
   }
@@ -14,7 +15,7 @@ class BookShelves extends Component {
   }
 
   statusChange = (data) => {
-    BooksAPI.update(data.book, data.value).then((json) => {
+    BooksAPI.update(data.book, data.value).then(() => {
       BooksAPI.getAll().then((books) => {
         this.setState({ books })
       });
@@ -29,7 +30,7 @@ class BookShelves extends Component {
           <div className="bookshelf" key={category.name}>
             <h2 key={category.name} className="bookshelf-title">{category.name}</h2>
             <Books
-              bookshelves={category}
+              bookshelf={category}
               books={this.state.books}
               statusChange={this.statusChange}
             />
