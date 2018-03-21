@@ -15,16 +15,32 @@ class SearchBar extends Component {
     this.setState({ results: [] })
   }
 
-  getResults = (query) => {
-    BooksAPI.search(query).then((results) => {
-      // I need to put some logic here, results don't have shelves associated
-      console.log('RESULTS', results)
-      this.setState({ results: results })
-    })
+  updateBookSearch = (book, shelf) => {
+    this.refreshResults(book, shelf)
+    this.props.onChangeSearch(book, shelf.value)
   }
 
-  updateBookSearch = (book, shelf) => {
-    this.props.onChangeSearch(book, shelf.value)
+  refreshResults = (book, shelf) => {
+    let previous = this.state.results
+    const bookToRefresh = previous.filter(b => b.id === book.id)[0]
+    bookToRefresh.shelf = shelf.value
+    this.setState({ results: previous })
+  }
+
+  getResults = (query) => {
+    const booksInShelves = this.props.books
+    BooksAPI.search(query).then((results) => {
+      if (!results.error) {
+        results.forEach((result) => {
+          const match = booksInShelves.find((book => { return book.id === result.id }))
+          if (match) return result.shelf = match.shelf
+          result.shelf = 'none'
+        })
+        this.setState({ results: results })
+      }
+    }).catch((error) => {
+      console.warn('You got the following error: ' + error)
+    })
   }
 
   render() {
@@ -50,13 +66,15 @@ class SearchBar extends Component {
                 <li key={book.id}>
                   <div className="book">
                     <div className="book-top">
-                      <div className="book-cover"
-                        style={{
-                          width: 128,
-                          height: 193,
-                          backgroundImage: `url(${book.imageLinks.smallThumbnail})`
-                        }}>
-                      </div>
+                      {book.imageLinks && book.imageLinks.smallThumbnail && (
+                        <div className="book-cover"
+                          style={{
+                            width: 128,
+                            height: 193,
+                            backgroundImage: `url(${book.imageLinks.smallThumbnail})`
+                          }}>
+                        </div>
+                      )}
                       <div className="book-shelf-changer">
                         <select onChange={(event) => this.updateBookSearch(book, event.target)} value={book.shelf}>
                           <option value="none" disabled>Move to...</option>
@@ -68,7 +86,11 @@ class SearchBar extends Component {
                       </div>
                     </div>
                     <div className="book-title">{book.title}</div>
-                    <div className="book-authors">{book.authors}</div>
+                    {book.authors && (
+                      <div className="book-authors">
+                        {book.authors[0]}
+                      </div>
+                    )}
                   </div>
                 </li>
               ))}

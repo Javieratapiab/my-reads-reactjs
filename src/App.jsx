@@ -12,21 +12,31 @@ class BooksApp extends Component {
     books: []
   }
 
+  errorMessage = (error) => {
+    return console.warn('You got the following error:' + error)
+  }
+
   componentDidMount = () => {
     BooksAPI.getAll().then((books) => {
       this.setState({ books })
+    }).catch((error) => {
+      this.errorMessage(error)
     })
   }
 
   changeShelf = (book, shelf) => {
     BooksAPI.update(book, shelf).then((books) => {
       this.refreshBooks()
+    }).catch((error) => {
+      this.errorMessage(error)
     })
   }
 
   refreshBooks = () => {
     BooksAPI.getAll().then((books) => {
       this.setState({ books })
+    }).catch((error) => {
+      this.errorMessage(error)
     })
   }
 
