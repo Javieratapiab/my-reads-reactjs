@@ -5,12 +5,12 @@ class Books extends Component {
   /* Setting propTypes */
   static propTypes = {
     books: PropTypes.array.isRequired,
-    bookshelves: PropTypes.object.isRequired
+    bookshelf: PropTypes.object.isRequired
   }
 
   /* Updates parent */
   updateStatus = (event, book) => {
-    this.props.statusChange({ value: event.value, book: book})
+    this.props.statusChange({ value: event.value, book: book })
   }
 
   render() {
@@ -41,7 +41,7 @@ class Books extends Component {
                       <option value="currentlyReading">Currently Reading</option>
                       <option value="wantToRead">Want to Read</option>
                       <option value="read">Read</option>
-                      <option value="none" disabled>None</option>
+                      <option value="none">None</option>
                     </select>
                   </div>
                 </div>
